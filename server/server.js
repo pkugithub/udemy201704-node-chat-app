@@ -19,11 +19,17 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log("user connection created ");
 
-    // socket.emit('newMessage', {
-    //   from: "joe blow",
-    //   text: "test message subject #1",
-    //   createdAt: 123
-    // });
+    socket.emit('newMessage', {
+      from: "Admin",
+      text: "Welcome, new user!",
+      createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+      from: "Admin",
+      text: "A new user has joined",
+      createdAt: new Date().getTime()
+    });
 
     socket.on('createMessage', (data) => {
       console.log('createMessage received by server - data:'+ JSON.stringify(data));
@@ -33,6 +39,8 @@ io.on('connection', (socket) => {
         text: data.text,
         createdAt: new Date().getTime()
       });
+
+
     })
 
     socket.on('disconnect', () => {
