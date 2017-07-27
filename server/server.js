@@ -19,6 +19,7 @@ var io = socketIO(server) ;
 //
 app.use(express.static(publicPath));
 
+//
 io.on('connection', (socket) => {
     console.log("user connection created ");
 
@@ -26,10 +27,12 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('newMessage', generateMessage("Admin", "A new user has joined"));
 
-    socket.on('createMessage', (data) => {
+    socket.on('createMessage', (data, callback) => {
       console.log('createMessage received by server - data:'+ JSON.stringify(data));
 
       io.emit('newMessage', generateMessage(data.from, data.text));
+
+      callback('This is from server');
 
     })
 
