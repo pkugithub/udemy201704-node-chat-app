@@ -38,3 +38,20 @@ jQuery('#message-form').on('submit', function (e) {
     console.log("#message-form:socket.emit('createMessage') callback fired in client - data:", data )
   })
 });
+
+var locationButton = jQuery('#send-location');
+
+locationButton.on('submit', function() {
+  console.log("<debug1>");
+
+  if (!navigator.geolocation) {
+    return alert('Browser does not support Geolocation');
+  }
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    console.log("position:", position);
+
+  }, function () {
+    alert('Unable to getCurrentPosition');
+  });
+});
