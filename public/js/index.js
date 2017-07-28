@@ -18,6 +18,19 @@ socket.on('newMessage', (data) => {
   jQuery('#messages').append(li);
 })
 
+socket.on('newLocationMessage', (data) => {
+  console.log('newLocationMessage received by client - data:'+ JSON.stringify(data));
+
+  var li = jQuery('<li></li>');
+  var a = jQuery('<a target="_blank">My current location</a>')
+
+  li.text(`[${data.createdAt}] ${data.from}: `);
+  a.attr('href', data.url);
+
+  li.append(a);
+  jQuery('#messages').append(li);
+})
+
 // // -- adhoc test code
 // socket.emit('createMessage', {
 //   from: "katie",
@@ -41,7 +54,7 @@ jQuery('#message-form').on('submit', function (e) {
 
 var locationButton = jQuery('#send-location');
 
-locationButton.on('submit', function() {
+locationButton.on('click', function() {
   console.log("<debug1>");
 
   if (!navigator.geolocation) {
@@ -50,6 +63,11 @@ locationButton.on('submit', function() {
 
   navigator.geolocation.getCurrentPosition(function (position) {
     console.log("position:", position);
+
+    socket.emit('createLocationMessage', {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    });
 
   }, function () {
     alert('Unable to getCurrentPosition');
