@@ -12,8 +12,10 @@ socket.on('disconnect', () => {
 socket.on('newMessage', (data) => {
   console.log('newMessage received by client - data:'+ JSON.stringify(data));
 
+  var formattedTime = moment(data.createdAt).format('h:mm a');
+
   var li = jQuery('<li></li>');
-  li.text(`[${data.createdAt}] ${data.from}: ${data.text}`);
+  li.text(`[${formattedTime}] ${data.from}: ${data.text}`);
 
   jQuery('#messages').append(li);
 })
@@ -21,10 +23,12 @@ socket.on('newMessage', (data) => {
 socket.on('newLocationMessage', (data) => {
   console.log('newLocationMessage received by client - data:'+ JSON.stringify(data));
 
+  var formattedTime = moment(data.createdAt).format('h:mm a');
+
   var li = jQuery('<li></li>');
   var a = jQuery('<a target="_blank">My current location</a>')
 
-  li.text(`[${data.createdAt}] ${data.from}: `);
+  li.text(`[${formattedTime}] ${data.from}: `);
   a.attr('href', data.url);
 
   li.append(a);
@@ -79,7 +83,7 @@ locationButton.on('click', function() {
 
   }, function () {
     locationButton.removeAttr('disabled').text('Send Location');
-    
+
     alert('Unable to getCurrentPosition');
   });
 });
