@@ -5,6 +5,7 @@ const http = require('http');
 
 //
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 
 //
 const publicPath = path.join(__dirname, '../public')
@@ -26,6 +27,15 @@ io.on('connection', (socket) => {
     socket.emit('newMessage', generateMessage("Admin", "Welcome, new user!" ) ) ;
 
     socket.broadcast.emit('newMessage', generateMessage("Admin", "A new user has joined"));
+
+    socket.on('join', (params, callback) => {
+      if (! isRealString(params.name) || ! isRealString(params.room) ) {
+          callback('Name and room name are required.')
+      }
+
+      callback();
+
+    })
 
     socket.on('createMessage', (data, callback) => {
       console.log('createMessage received by server - data:'+ JSON.stringify(data));
