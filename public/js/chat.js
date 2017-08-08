@@ -47,6 +47,18 @@ socket.on('disconnect', () => {
   console.log('disconnected from server')
 })
 
+socket.on('updateUserList', ( users ) => {
+  console.log('chat.js> updateUserList - users:', users);
+
+  var ol = jQuery('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append(jQuery('<li></li>').text(user));
+  });
+
+  jQuery('#users').html(ol);
+});
+
 socket.on('newMessage', (data) => {
   var formattedTime = moment(data.createdAt).format('h:mm a');
   var template = jQuery('#message-template').html();
