@@ -73,8 +73,6 @@ io.on('connection', (socket) => {
         io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left the room`));
       }
     });
-
-
 });
 
 //
